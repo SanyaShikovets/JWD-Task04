@@ -2,8 +2,10 @@ package by.epam.task04.model.entity;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 @Data
-public class Word {
+public class Word implements Serializable {
 
     @NonNull
     private String contentWord;

@@ -15,41 +15,33 @@ import java.util.Set;
 
 public class Service {
 
-    public void outputIncrementListOfSentences(Text text){
+    public List<Sentence> outputIncrementListOfSentences(Text text){
         SentenceIncrementByCountWord sentenceIncrementByCountWord = new SentenceIncrementByCountWord();
-        ArrayList<Sentence> sortSentences = new ArrayList<>(sentenceIncrementByCountWord.getIncrementListOfSentences(text));
-        for(Sentence sentence : sortSentences){
-            System.out.println(sentence);
-        }
+        List<Sentence> sortSentences = new ArrayList<>(sentenceIncrementByCountWord.getIncrementListOfSentences(text));
+        return sortSentences;
     }
 
-    public void outputListOfWordsThatOnlyInFirstSentence(Text text){
+    public List<Word> outputListOfWordsThatOnlyInFirstSentence(Text text){
         WordsOFFirstSentenceWhichNotInOtherSentences wordsOFFirstSentenceWhichNotInOtherSentences = new WordsOFFirstSentenceWhichNotInOtherSentences();
         List<Word> foundWords = new ArrayList<>(wordsOFFirstSentenceWhichNotInOtherSentences.getFoundWords(text));
-        for(Word word : foundWords){
-            System.out.println(word);
-        }
+        return foundWords;
     }
 
-    public void outputAmountSentencesWithRepeatWords(Text text){
+    public int outputAmountSentencesWithRepeatWords(Text text){
         AmountSentencesWithRepeatWords amountSentencesWithRepeatWords = new AmountSentencesWithRepeatWords();
         int amount = amountSentencesWithRepeatWords.getAmountSentences(text);
-        System.out.println(amount);
+        return amount;
     }
 
-    public void outputWordsGivenLengthInInterrogativeSentences(Text text, int givenLength){
+    public Set<Word> outputWordsGivenLengthInInterrogativeSentences(Text text, int givenLength){
         SearchWordGivenLengthInInterrogativeSentences searchWordGivenLengthInInterrogativeSentences = new SearchWordGivenLengthInInterrogativeSentences();
         Set<Word> words = searchWordGivenLengthInInterrogativeSentences.getFoundWords(text, givenLength);
-        for(Word word : words){
-            System.out.println(word);
-        }
+        return words;
     }
 
-    public void outputChangedTextFirstAndLastWords(Text text){
+    public List<Sentence> outputChangedTextFirstAndLastWords(Text text){
         ChangePlaceFirstAndLastWordInSentences changePlaceFirstAndLastWordInSentences = new ChangePlaceFirstAndLastWordInSentences();
         changePlaceFirstAndLastWordInSentences.changePlace(text);
-        for(Sentence sentence : text.getSentences()){
-            System.out.println(sentence);
-        }
+        return text.getSentences();
     }
 }

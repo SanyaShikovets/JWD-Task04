@@ -1,55 +1,51 @@
 package by.epam.task04.view;
 
+import by.epam.task04.controller.Controller;
+import by.epam.task04.model.entity.Sentence;
 import lombok.extern.java.Log;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.List;
 
 @Log
 public class Client {
 
-    private static Socket clientSocket; //сокет для общения
-    private static BufferedReader reader; // нам нужен ридер читающий с консоли, иначе как
-    // мы узнаем что хочет сказать клиент?
-    private static BufferedReader in; // поток чтения из сокета
-    private static BufferedWriter out; // поток записи в сокет
+    private static Socket clientSocket;
+    private static BufferedReader reader;
+    //private static BufferedReader in;
+    private static ObjectInputStream in;
+    private static BufferedWriter out;
 
     public static void main(String[] args) {
         try {
             try {
-                // адрес - локальный хост, порт - 4004, такой же как у сервера
-                clientSocket = new Socket("localhost", 4004); // этой строкой мы запрашиваем
-                //  у сервера доступ на соединение
+                clientSocket = new Socket("localhost", 4004);
                 reader = new BufferedReader(new InputStreamReader(System.in));
-                // читать соообщения с сервера
-                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                // писать туда же
+                in = new ObjectInputStream(clientSocket.getInputStream());
                 out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 
+
                 while (true) {
-                    log.info("Вы что-то хотели сказать? Введите это здесь:");
-                    // если соединение произошло и потоки успешно созданы - мы можем
-                    //  работать дальше и предложить клиенту что то ввести
-                    // если нет - вылетит исключение
-                    String word = reader.readLine(); // ждём пока клиент что-нибудь
+                    String word = reader.readLine();
                     if(word.equals("exit")){
-                        out.write(word + "\n"); // отправляем сообщение на сервер
+                        out.write(word + "\n");
                         out.flush();
                         return;
                     }
-                    // не напишет в консоль
-                    out.write(word + "\n"); // отправляем сообщение на сервер
+                    out.write(word + "\n");
                     out.flush();
-                    String serverWord = in.readLine(); // ждём, что скажет сервер
-                    log.info(serverWord); // получив - выводим на экран
+                    Object sentences = in.readObject();
+                    System.out.println(sentences);
+                    //log.info(serverWord);
                 }
-            } finally { // в любом случае необходимо закрыть сокет и потоки
+            } finally {
                 log.info("Клиент был закрыт...");
                 clientSocket.close();
                 in.close();
                 out.close();
             }
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             log.info(e.getMessage());
         }
 
